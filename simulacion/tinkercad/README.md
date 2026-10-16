@@ -1,6 +1,6 @@
 # Circuito del MiniSumo en Tinkercad
 
-Tinkercad Circuits no tiene todas nuestras piezas, así que en la simulación se usan equivalentes. El cableado y la lógica son los mismos que en el robot real ([conexiones reales](../../hardware/conexiones.md)).
+Tinkercad Circuits no tiene todas nuestras piezas, así que en la simulación se usan equivalentes. La lógica es la misma que en el robot real, pero los pines de los sensores de rival no: en Tinkercad D7, D8, D11, D12, A4 y A5 van a los ultrasónicos, y en el robot D7, D8 y D12 son los XSHUT y A4/A5 el bus I2C. Para el robot usa los pines de [conexiones reales](../../hardware/conexiones.md), no copies el sketch tal cual.
 
 | Pieza real | En Tinkercad | Por qué sirve |
 |---|---|---|
@@ -93,5 +93,5 @@ Cada potenciómetro: una pata lateral a **5 V**, la otra a **GND** y la del **me
 ## Diferencias con el robot real
 
 - El L293D pierde ≈1.5–2 V; el DRV8833 casi nada. En Tinkercad las rpm salen menores que en la realidad.
-- Los HC-SR04 se leen por pulsos; los VL53L0X, por I2C. En el robot real solo cambia la función `leerRival()`.
+- Los HC-SR04 se leen por pulsos; los VL53L0X, por I2C. En el robot real cambian `leerRival()`, las constantes de pines de los sensores de rival y su parte de `setup()`.
 - Los TCRT5000 reales hay que calibrarlos sobre el dojo. El `UMBRAL_BLANCO = 300` es solo para la simulación.
