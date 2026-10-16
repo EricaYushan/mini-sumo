@@ -17,6 +17,14 @@ Todas las tierras (LiPo −, buck, DRV8833, Nano y sensores) van unidas.
 
 Pon un capacitor de 100–470 µF entre VM y GND, cerca del DRV8833.
 
+**Nuestra placa DRV8833** (la negra con pines IN1–IN4, VCC, GND, EEP, OUT1–OUT4 y
+ULT) no tiene pin VM: ahí se llama **VCC**, y es la entrada de la batería, no
+de 5 V. Las equivalencias son AIN1/AIN2 = IN1/IN2, BIN1/BIN2 = IN3/IN4,
+AOUT = OUT1/OUT2, BOUT = OUT3/OUT4 y ULT = nFAULT. Si el puente **J1** está
+soldado, EEP queda unido a VCC: en ese caso no conectes EEP al 5 V del Nano
+(juntarías la batería con el rail de 5 V). Revisa con el multímetro en
+continuidad entre EEP y VCC antes de cablear.
+
 ### Antes de conectar el buck
 
 **Ajusta el buck a 5.0 V con el multímetro antes de conectarle nada.** Los
