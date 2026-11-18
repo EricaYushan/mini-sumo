@@ -91,6 +91,69 @@ que el buck dé 5.0 V exactos, así que compárala una vez con el multímetro.
 
 Quedan libres A7 y D11.
 
+La alimentación de cada sensor (VCC, GND) está en la sección siguiente.
+
+## Sensores: cableado pin por pin
+
+La tabla de arriba solo dice a qué pin del Nano va la señal. Cada sensor lleva
+además su alimentación. Todos los VCC/VIN van al riel de **5 V** y todos los
+GND al riel de **GND** de la protoboard.
+
+### TCRT5000 (módulo de 4 pines: VCC, GND, DO, AO)
+
+| Sensor | VCC | GND | AO | DO |
+|---|---|---|---|---|
+| Frontal izquierdo (FI) | Riel 5 V | Riel GND | A0 | Sin conectar |
+| Frontal derecho (FD) | Riel 5 V | Riel GND | A1 | Sin conectar |
+| Trasero izquierdo (TI) | Riel 5 V | Riel GND | A2 | Sin conectar |
+| Trasero derecho (TD) | Riel 5 V | Riel GND | A3 | Sin conectar |
+
+- **AO** es la salida analógica: da un valor alto sobre el dojo negro y bajo
+  sobre la línea blanca. El umbral se calibra en el dojo real.
+- **DO** es la salida digital que compara contra el trimpot azul del módulo. No
+  la usamos, así que queda al aire. Tampoco hace falta mover el trimpot.
+- Si el módulo trae un LED rojo de encendido, debe prender en cuanto le llegan
+  5 V y GND. Si no prende, revisa esos dos cables antes que nada.
+
+### VL53L0X (VIN, GND, SCL, SDA, GPIO1, XSHUT)
+
+| Sensor | VIN | GND | SDA | SCL | XSHUT | GPIO1 |
+|---|---|---|---|---|---|---|
+| Izquierdo | Riel 5 V | Riel GND | A4 | A5 | D7 | Sin conectar |
+| Central | Riel 5 V | Riel GND | A4 | A5 | D8 | Sin conectar |
+| Derecho | Riel 5 V | Riel GND | A4 | A5 | D12 | Sin conectar |
+
+- **SDA y SCL son compartidos**: los tres SDA van juntos a A4 y los tres SCL
+  juntos a A5. En la protoboard, usa una fila para SDA y otra para SCL, con un
+  cable de cada sensor y uno al Nano.
+- **XSHUT es propio** de cada sensor (D7, D8, D12). Nunca los unas entre sí.
+- VIN va a 5 V porque estas placas traen su propio regulador a 2.8 V. Si tu
+  placa solo tiene un pin **VCC** y no dice VIN, revisa si tiene regulador (un
+  componente chico de 3 o 5 patas junto al conector). Si no lo tiene, aliméntala
+  con el **3V3** del Nano, no con 5 V.
+- Los XSHUT se manejan como se explica en la sección de direcciones I2C, más
+  abajo: nunca en HIGH.
+
+### Cómo poner los módulos en la protoboard
+
+En la protoboard, los 5 agujeros de cada fila numerada (a–e, y f–j del otro
+lado del canal) están unidos por dentro. Por eso:
+
+- **Coloca el módulo con sus pines a lo largo de la tabla**, de modo que cada
+  pin quede en una **fila numerada distinta**. Si pones los 4 pines del TCRT5000
+  (o los 6 del VL53L0X) en la misma fila, quedan todos en corto: VCC con GND, y
+  la señal pegada a los dos.
+- Después, desde cada fila sacas un cable: la fila del VCC al riel rojo, la del
+  GND al riel azul y la de AO (o SDA, SCL, XSHUT) a su pin del Nano.
+- En muchas protoboards los rieles largos están **cortados a la mitad**
+  (la línea roja o azul se interrumpe). Si usas las dos mitades, une cada riel
+  con un puente.
+- El riel de 5 V se alimenta desde el pin **5V** del Nano y el riel de GND desde
+  un pin **GND** del Nano. En el banco de pruebas basta con el USB. Cuando
+  conectes el buck, su salida va al mismo riel de 5 V.
+- Antes de darle corriente, mide con el multímetro en continuidad entre el riel
+  de 5 V y el de GND: no debe pitar.
+
 ## Salidas del DRV8833
 
 | Salida | Va a |
