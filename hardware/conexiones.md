@@ -11,7 +11,8 @@ LiPo 2S (+) ── Switch ──┬── DRV8833 VM (motores, 7.4–8.4 V)
                         └── Buck 5 V IN
 Buck 5 V OUT ───────────┬── Nano 5V
                         ├── VCC de los TCRT5000
-                        └── VIN de los VL53L0X
+                        ├── VIN de los VL53L0X
+                        └── VCC del MPU6050 (opcional)
 Todas las tierras (LiPo −, buck, DRV8833, Nano y sensores) van unidas.
 ```
 
@@ -74,10 +75,11 @@ que el buck dé 5.0 V exactos, así que compárala una vez con el multímetro.
 | Motor izquierdo, entrada 2 | D6 (PWM) | DRV8833 AIN2 |
 | Motor derecho, entrada 1 | D9 (PWM) | DRV8833 BIN1 |
 | Motor derecho, entrada 2 | D10 (PWM) | DRV8833 BIN2 |
-| Habilitar driver | 5 V (o un pin libre) | DRV8833 nSLEEP / EEP |
+| Habilitar driver | 5 V (o un pin libre) | DRV8833 nSLEEP / EEP (no si J1 está soldado) |
+| Falla del driver (opcional) | D11 (INPUT_PULLUP) | DRV8833 ULT / nFAULT |
 | Voltaje de batería | A6 | Divisor 10 k + 10 k (ver arriba) |
-| I2C SDA | A4 | SDA de los 3 VL53L0X |
-| I2C SCL | A5 | SCL de los 3 VL53L0X |
+| I2C SDA | A4 | SDA de los 3 VL53L0X y del MPU6050 |
+| I2C SCL | A5 | SCL de los 3 VL53L0X y del MPU6050 |
 | XSHUT del VL53L0X izquierdo | D7 | XSHUT |
 | XSHUT del VL53L0X central | D8 | XSHUT |
 | XSHUT del VL53L0X derecho | D12 | XSHUT |
@@ -89,7 +91,7 @@ que el buck dé 5.0 V exactos, así que compárala una vez con el multímetro.
 | Estrategia (opcional) | D3, D4 | DIP switch a GND |
 | LED de estado | D13 | LED integrado |
 
-Quedan libres A7 y D11.
+Queda libre A7 (y D11 si no usas el pin de falla del driver).
 
 La alimentación de cada sensor (VCC, GND) está en la sección siguiente.
 
@@ -154,6 +156,22 @@ lado del canal) están unidos por dentro. Por eso:
 - Antes de darle corriente, mide con el multímetro en continuidad entre el riel
   de 5 V y el de GND: no debe pitar.
 
+### MPU6050 (GY-521: VCC, GND, SCL, SDA, XDA, XCL, AD0, INT), opcional
+
+| VCC | GND | SDA | SCL | AD0 | XDA, XCL, INT |
+|---|---|---|---|---|---|
+| Riel 5 V | Riel GND | A4 | A5 | GND o al aire | Sin conectar |
+
+- Comparte el bus I2C con los VL53L0X. Su dirección es **0x68** (AD0 en GND),
+  así que no choca con 0x29 ni con 0x30–0x32.
+- El GY-521 trae regulador a 3.3 V, por eso va a 5 V. Si tu placa no lo trae,
+  aliméntala con el 3V3 del Nano.
+- Va plano, cerca del centro, con la flecha X hacia adelante y bien fijo.
+- Usa solo uno; el segundo queda de repuesto.
+
+Cableado paso a paso y sketch de prueba en
+[`firmware/pruebas/`](../firmware/pruebas/README.md).
+
 ## Salidas del DRV8833
 
 | Salida | Va a |
@@ -162,6 +180,11 @@ lado del canal) están unidos por dentro. Por eso:
 | BOUT1, BOUT2 | Motor derecho |
 
 Si un motor gira al revés, invierte sus dos cables (o invierte el sentido en el código).
+
+Pon un capacitor cerámico de 100 nF entre las dos terminales de cada motor.
+Los cables de batería y motores van directos a la placa del DRV8833, no por la
+protoboard. Cableado paso a paso, cómo revisar si el DRV8833 alcanza para tus
+motores y sketch de prueba en [`firmware/pruebas/`](../firmware/pruebas/README.md).
 
 ### PWM distinto en cada motor
 
