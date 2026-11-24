@@ -174,6 +174,8 @@ Cableado paso a paso y sketch de prueba en
 
 ## Salidas del DRV8833
 
+Guía completa de los motores, con diagrama: [`motores.md`](motores.md).
+
 | Salida | Va a |
 |---|---|
 | AOUT1, AOUT2 | Motor izquierdo |

@@ -40,6 +40,10 @@ const int PIN_FALLA = 11;  // DRV8833 ULT (nFAULT), opcional
 const bool INVERTIR_IZQ = false;
 const bool INVERTIR_DER = false;
 
+// Tope de PWM. 255 para los motores de 12 V. Para N20 de 6 V con la LiPo
+// 2S usa 180 (≈6 V con la batería llena): más alto los calienta.
+const int PWM_MAX = 255;
+
 // Pausa al cambiar de sentido. Evita el pico de corriente de pasar de
 // adelante a atrás de golpe, que es lo que más reinicia al Nano.
 const unsigned long PAUSA_INVERSION_MS = 120;
@@ -52,6 +56,7 @@ int ultimoIzq = 0, ultimoDer = 0;
 void motor(int pin1, int pin2, int v, bool invertir) {
   if (invertir) v = -v;
   v = constrain(v, -255, 255);
+  v = (long)v * PWM_MAX / 255;   // escalar al tope
   if (v > 0) {
     digitalWrite(pin2, LOW);
     analogWrite(pin1, v);
@@ -80,6 +85,7 @@ void motores(int izq, int der) {
 
 // Freno activo: las dos entradas en HIGH (el motor queda en corto y se
 // detiene rápido). Usa más corriente que soltar.
+// (el freno pone las entradas en HIGH fijo, sin PWM: no mueve el motor)
 void frenar() {
   digitalWrite(IZQ_1, HIGH); digitalWrite(IZQ_2, HIGH);
   digitalWrite(DER_1, HIGH); digitalWrite(DER_2, HIGH);

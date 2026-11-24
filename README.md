@@ -10,6 +10,7 @@ Robot MiniSumo autónomo para el **6.º Foro Nacional de Ingenierías UVM 2026**
 | [`docs/Reporte_Convocatoria_Sumos.pdf`](docs/Reporte_Convocatoria_Sumos.pdf) | Reporte técnico de orientación (fuente del resumen) |
 | [`hardware/materiales.md`](hardware/materiales.md) | Piezas que tenemos, piezas que faltan y presupuesto de peso |
 | [`hardware/conexiones.md`](hardware/conexiones.md) | Pines del Arduino Nano y cableado del robot real |
+| [`hardware/motores.md`](hardware/motores.md) | Cómo conectar los motores al DRV8833 y al Nano, paso a paso |
 | [`firmware/pruebas/`](firmware/pruebas/README.md) | Cableado paso a paso y un sketch de prueba por componente (motores, MPU6050) |
 | [`simulacion/tinkercad/`](simulacion/tinkercad/) | Guía para armar el circuito en Tinkercad y el sketch para simularlo |
 
